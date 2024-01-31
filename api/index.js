@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require('dotenv');
 const userRouter = require("./routes/UserRoutes");
+const postRouter = require("./routes/PostRoutes");
 // Load environment variables from a .env file
 dotenv.config();
 app.use(cors());
@@ -12,9 +13,7 @@ app.use(express.json());
 
 // routes
 app.use("/user", userRouter);
-
-
-
+app.use("/post", postRouter);
 
 
 
