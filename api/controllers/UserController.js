@@ -15,11 +15,10 @@ const signup = async (req, res) => {
 
         //  Encrypting the password using Bcrypt
         const salt = await bcrypt.genSalt(10);
-        hashed = await bcrypt.hash(password, salt);
+        hashed = await bcrypt.hash(password, 10);
 
         //  Creating a new user with encrypted password and saving it to the database
-        const user = new User({ name, email, password: hashed });
-        await user.save();
+        const user = await User.create({name,  email, password : hashed});
 
         //  Sending back a response with a status of Created (201) and the newly created
         res.status(201).json({ name: user.name, email: user.email, token: generateToken(user) });

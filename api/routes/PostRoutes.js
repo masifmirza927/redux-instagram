@@ -10,6 +10,6 @@ const upload = multer({ storage: storage });
 
 router.post("/create", [checkAuth, upload.single('image')] , postCtrl.createPost);
 router.get("/my", checkAuth,  postCtrl.myPosts);
-// router.get("/all",  postCtrl.allPosts);
+router.get("/all",  postCtrl.allPosts);
 
 module.exports = router;

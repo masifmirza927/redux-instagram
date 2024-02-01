@@ -18,6 +18,7 @@ const checkAuth = (req, res, next) => {
         
         // todo check if user id is availab in db
         
+        // attaching userId with request to send on controller
         req.userId = decoded._id;
         next();
 

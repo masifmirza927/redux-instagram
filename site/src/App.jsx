@@ -15,7 +15,6 @@ function App() {
       <Navbar />
       
       <div className='container'>
-      <h1>Authentication</h1>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />

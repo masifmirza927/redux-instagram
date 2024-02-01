@@ -43,4 +43,20 @@ const myPosts = async (req, res) => {
     }
 }
 
-module.exports = { createPost, myPosts }
+const allPosts = async (req, res) => {
+    try {
+        const posts = await Post.find();
+
+        return res.status(200).json({
+            status: "success",
+            posts: posts
+        })
+    } catch (error) {
+        return res.status(404).json({
+            status: "failed",
+            message: error.message
+        })
+    }
+}
+
+module.exports = { createPost, myPosts, allPosts }
