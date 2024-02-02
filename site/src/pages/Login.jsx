@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-
+import { Button } from 'antd';
+import { asyncLogin } from "../redux/authSlice"
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux"
 
 const loginSchema = yup
   .object({
@@ -11,14 +14,40 @@ const loginSchema = yup
   }).required()
 
 const Login = () => {
+
   const { register, handleSubmit, watch, formState: { errors }, } = useForm({
     resolver: yupResolver(loginSchema),
   });
+  const userInfo = useSelector((state) => state.userAuth);
+  const navigator = useNavigate();
+  const dispacher = useDispatch();
+
+  // loading
+  // const enterLoading = (index) => {
+  //   setLoadings((prevLoadings) => {
+  //     const newLoadings = [...prevLoadings];
+  //     newLoadings[index] = true;
+  //     return newLoadings;
+  //   });
+  //   setTimeout(() => {
+  //     setLoadings((prevLoadings) => {
+  //       const newLoadings = [...prevLoadings];
+  //       newLoadings[index] = false;
+  //       return newLoadings;
+  //     });
+  //   }, 6000);
+  // };
 
 
   const onSubmit = (data) => {
-    console.log(data);
+    dispacher(asyncLogin(data))
   }
+
+  useEffect(() => {
+    if (userInfo.isLogin === true) {
+      navigator("/");
+    }
+  }, [userInfo.isLogin]);
 
   return (
     <>

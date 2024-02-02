@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
+import AuthGuard from './components/AuthGuard';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,10 +14,11 @@ function App() {
   return (
     <>
       <Navbar />
-      
+
       <div className='container'>
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<AuthGuard> <Home /> </AuthGuard>} />
+
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
           {/* <Route path='/' element={<Home />} /> */}
