@@ -34,6 +34,7 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // checing user is registered or not
         const user =  await User.findOne({ email: email });
         if (!user) {
             return res.status(401).json({ status: 'failed', message: 'Invalid Email or Password' });
@@ -45,6 +46,7 @@ const login = async (req, res) => {
             return res.status(401).json({ status:'failed', message:"Invalid Email or Password"})
         }
 
+        // success
         return res.status(200).json({
             status: 'success',
             token: generateToken(user) 

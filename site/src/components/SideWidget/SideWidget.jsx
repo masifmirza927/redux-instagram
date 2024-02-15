@@ -8,6 +8,7 @@ import { MdCreateNewFolder } from "react-icons/md";
 import { BiAtom } from "react-icons/bi";
 import PostModal from '../PostModal/PostModal';
 import {useSelector} from "react-redux"
+import httpClient from '../../httpClient';
 
 
 const SideWidget = ({ image }) => {
@@ -24,6 +25,16 @@ const SideWidget = ({ image }) => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
+    const handleAxios = () => {
+        try {
+            httpClient.get("/post/my").then((res) => {
+-                  console.log(res)
+            })
+        } catch (error) {
+            
+        }
+    }
 
     return (
 
@@ -67,6 +78,7 @@ const SideWidget = ({ image }) => {
                     <MdCreateNewFolder style={{ fontSize: "24px" }} />
                     <span>New Post</span>
                 </button>
+                <button onClick={handleAxios}>Call Axios</button>
                 {/* <input type="file" accept="capture=camera,image/*" /> */}
             </div>
         </div>

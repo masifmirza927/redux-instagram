@@ -1,16 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios"
+import httpClient from '../httpClient';
 
 
 // async login calls
 export const asyncLogin = createAsyncThunk('authSlice/asyncLogin', async (credentials) => {
-    try {
-        const res = await axios.post(`${import.meta.env.VITE_API_SERVER_URL}/user/login`, credentials);
-        return res.data;
-    } catch (error) {
-        console.log(error.message)
+        try {
+            //const res = await axios.post(`${import.meta.env.VITE_API_SERVER_URL}/user/login`, credentials);
+            const res = await httpClient.post(`${import.meta.env.VITE_API_SERVER_URL}/user/login`, credentials);
+            return res.data;
+        } catch (error) {
+            console.log(error.message)
+        }
     }
-}
 )
 
 
@@ -33,8 +35,9 @@ export const authSlice = createSlice({
         })
         builder.addCase(asyncLogin.fulfilled, (state, action) => {
             state.loading = false;
-            if(action.payload.status == "success") {
+            if (action.payload.status == "success") {
                 state.userToken = action.payload.token;
+                localStorage.setItem("accessToken", action.payload.token)
                 state.isLogin = true;
             }
         })

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -15,12 +15,15 @@ const loginSchema = yup
 
 const Login = () => {
 
-  const { register, handleSubmit, watch, formState: { errors }, } = useForm({
+  const { register, handleSubmit, formState: { errors }, } = useForm({
     resolver: yupResolver(loginSchema),
   });
+
   const userInfo = useSelector((state) => state.userAuth);
   const navigator = useNavigate();
   const dispacher = useDispatch();
+  const [loadings, setLoadings] = useState(true);
+
 
   // loading
   // const enterLoading = (index) => {
@@ -89,9 +92,11 @@ const Login = () => {
               {
                 (errors.password) ? <p className='alert alert-danger'>{errors.password?.message}</p> : null
               }
-              <button type="submit" className="btn btn-primary">
+              <Button type="primary" htmlType='submit'
+                // loading={loadings}
+              >
                 Login
-              </button>
+              </Button>
             </form>
           </div>
         </div>
