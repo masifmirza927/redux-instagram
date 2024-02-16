@@ -78,8 +78,6 @@ const SideWidget = ({ image }) => {
                     <MdCreateNewFolder style={{ fontSize: "24px" }} />
                     <span>New Post</span>
                 </button>
-                <button onClick={handleAxios}>Call Axios</button>
-                {/* <input type="file" accept="capture=camera,image/*" /> */}
             </div>
         </div>
     )
