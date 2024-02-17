@@ -32,11 +32,17 @@ const createPost = async (req, res) => {
 
 const myPosts = async (req, res) => {
     try {
-        const posts = await Post.find({authorId: req.userId});
+
+        const posts = await Post.find({authorId: req.userId}).populate({
+            path: "authorId",
+            //select: "name", // Only include 'name' field from User collection
+            //match: { $exists: true }
+          }).sort({createdAt: -1})
+          const filteredPosts = posts.filter(p => p.authorId != null);
 
         return res.json({
             status: 'success',
-            posts: posts
+            posts: filteredPosts
         })
     } catch (error) {
         console.log(error.message);
@@ -45,12 +51,23 @@ const myPosts = async (req, res) => {
 
 const allPosts = async (req, res) => {
     try {
-        const posts = await Post.find();
+        // const posts = await Post.find({authorId:{$ne: null} }).populate("authorId").exec( (err, posts) => {
+        //     console.log(err)
+        // });
+
+        const posts = await Post.find().populate({
+            path: "authorId",
+            //select: "name", // Only include 'name' field from User collection
+            //match: { $exists: true }
+          }).sort({createdAt: -1})
+
+        const filteredPosts = posts.filter(p => p.authorId != null);
 
         return res.status(200).json({
             status: "success",
-            posts: posts
-        })
+            posts: filteredPosts
+        });
+
     } catch (error) {
         return res.status(404).json({
             status: "failed",

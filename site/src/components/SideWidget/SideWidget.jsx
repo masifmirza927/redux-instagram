@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import "./styles.css";
 import { Link } from "react-router-dom";
 import { IoMdHome } from "react-icons/io";
@@ -7,14 +7,15 @@ import { RiUserSettingsFill } from "react-icons/ri";
 import { MdCreateNewFolder } from "react-icons/md";
 import { BiAtom } from "react-icons/bi";
 import PostModal from '../PostModal/PostModal';
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import httpClient from '../../httpClient';
+import LoadingBar from 'react-top-loading-bar'
 
 
-const SideWidget = ({ image }) => {
+const SideWidget = ({ image, setPosts, setUpdatePosts }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const userInfo = useSelector( (state) => state.userAuth)
-    console.log(userInfo)
+    const userInfo = useSelector((state) => state.userAuth)
+    const loadingRef = useRef(null);
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -26,20 +27,25 @@ const SideWidget = ({ image }) => {
         setIsModalOpen(false);
     };
 
-    const handleAxios = () => {
-        try {
+    const handleMyPosts = () => {
+        loadingRef.current.continuousStart();
+        // alert(localStorage.getItem("accessToken"));
             httpClient.get("/post/my").then((res) => {
--                  console.log(res)
+                if (res.data.status == 'success') {
+                    setPosts(res.data.posts);
+                }
+            }).catch(err => console.log(err.message))
+            .finally( () => {
+                loadingRef.current.complete();
             })
-        } catch (error) {
-            
-        }
+
     }
 
     return (
 
         <div className=' p-4'>
-            <PostModal isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel}  />
+            <LoadingBar  ref={loadingRef} />
+            <PostModal isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel} />
             <div className='mx-auto text-center'>
                 <img src={image} className='d-inline sidewidget__photo object-fit-cover' />
             </div>
@@ -62,11 +68,11 @@ const SideWidget = ({ image }) => {
             </div>
 
             <div className='navLinks py-2'>
-                <Link to='/' className="btn btn-outline-dark border-0 fs-5 px-3 py-2 align-items-center gap-2 text-start d-flex mb-2 ">
+                <button onClick={ () => setUpdatePosts(true)} className="btn btn-outline-dark border-0 fs-5 px-3 py-2 align-items-center gap-2 text-start d-flex mb-2 ">
                     <IoMdHome style={{ fontSize: "24px" }} />
                     <span>Home</span>
-                </Link>
-                <Link to='/' className="btn btn-outline-dark fs-5  border-0 px-3 py-2 align-items-center gap-2 text-start d-flex mb-2">
+                </button>
+                <Link to='/' onClick={handleMyPosts} className="btn btn-outline-dark fs-5  border-0 px-3 py-2 align-items-center gap-2 text-start d-flex mb-2">
                     <BsFillSignpostSplitFill style={{ fontSize: "24px" }} />
                     <span>My Posts</span>
                 </Link>

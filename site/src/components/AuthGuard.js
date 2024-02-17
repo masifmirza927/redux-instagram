@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom"
 const AuthGuard = ({ children }) => {
     const userInfo = useSelector((state) => state.userAuth);
     let navigate = useNavigate();
-
+    const accessToken = localStorage.getItem("accessToken");
     useEffect(() => {
-        if (userInfo.isLogin === false) {
+        if (accessToken == null || accessToken == undefined) {
             navigate("/login")
         }
     }, [])
 
-    if (userInfo.isLogin === true) {
-        return  children
+    if (accessToken) {
+        return children
     }
 }
 
