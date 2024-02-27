@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Modal } from 'antd';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -14,6 +14,7 @@ const postSchema = yup
 
 const PostModal = ({ isModalOpen, handleOk, handleCancel }) => {
     const [isLoading, setIsLoading] = useState(false);
+
     // Modal Code
     const { register, handleSubmit, formState: { errors }, } = useForm({
         resolver: yupResolver(postSchema),
@@ -21,7 +22,7 @@ const PostModal = ({ isModalOpen, handleOk, handleCancel }) => {
 
     // create post
     const onSubmit = (data) => {
-        setIsLoading(true)
+        setIsLoading(true);
         httpClient.post("/post/create", {
             content: data.content,
             image: data.image[0]
@@ -33,7 +34,7 @@ const PostModal = ({ isModalOpen, handleOk, handleCancel }) => {
             console.log(res)
             handleCancel();
         }).catch(err => console.log(err.message))
-        .finally(() => setIsLoading(false));
+            .finally(() => { });
     }
 
     return (
